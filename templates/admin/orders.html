@@ -1,0 +1,16 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<h1>{{ t('orders', 'Orders') }}</h1>
+<div class="panel table-responsive">
+ <table class="table align-middle admin-orders-table">
+  <thead><tr><th>{{ t('orders', 'Order') }}</th><th>{{ t('customer', 'Customer') }}</th><th>{{ t('shipping_location', 'Shipping location') }}</th><th>{{ t('total', 'Total') }}</th><th>{{ t('payment', 'Payment') }} / {{ t('fulfilment', 'Fulfilment') }}</th></tr></thead>
+  <tbody>{% for o in orders %}<tr>
+   <td><strong>#{{ o.id }}</strong><br><small class="text-secondary">{{ o.created_at.strftime('%d %b %Y · %H:%M') }}</small></td>
+   <td><strong>{{ o.user.name }}</strong><br><a class="small" href="tel:{{ o.phone }}"><i class="bi bi-telephone me-1"></i>{{ o.phone }}</a></td>
+   <td><div class="order-location"><i class="bi bi-geo-alt-fill"></i><span>{{ o.shipping_address }}</span></div></td>
+   <td><strong>${{ '%.2f'|format(o.total_amount) }}</strong><br><small>{{ o.items|length }} {{ t('products', 'items') }}</small></td>
+   <td><form class="row g-2" action="{{ url_for('admin.order_status', order_id=o.id) }}" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><div class="col-md"><select class="form-select form-select-sm" name="payment_status">{% for s in payment_statuses %}<option value="{{ s }}" {% if o.payment_status==s %}selected{% endif %}>{{ t(s, s|title) }}</option>{% endfor %}</select></div><div class="col-md"><select class="form-select form-select-sm" name="status">{% for s in statuses %}<option value="{{ s }}" {% if o.status==s %}selected{% endif %}>{{ t(s, s|title) }}</option>{% endfor %}</select></div><div class="col-auto"><button class="btn btn-sm btn-dark">{{ t('save', 'Save') }}</button></div></form></td>
+  </tr>{% else %}<tr><td colspan="5" class="text-center py-5">{{ t('no_orders', 'No orders.') }}</td></tr>{% endfor %}</tbody>
+ </table>
+</div>
+{% endblock %}

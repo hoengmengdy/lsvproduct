@@ -1,0 +1,45 @@
+TRANSLATIONS = {
+    "km": {
+        "search": "ស្វែងរកផលិតផល...", "shop": "ហាង", "brands": "ម៉ាកផលិតផល",
+        "sign_in": "ចូលគណនី", "profile": "ប្រវត្តិរូប", "orders": "ការបញ្ជាទិញ",
+        "wishlist": "បញ្ជីចង់បាន", "sign_out": "ចាកចេញ", "all_products": "ផលិតផលទាំងអស់",
+        "account": "គណនី", "stay_connected": "ទំនាក់ទំនង", "footer_copy": "ផលិតផលដែលជ្រើសរើសដោយយកចិត្តទុកដាក់ សម្រាប់ជីវិតប្រចាំថ្ងៃ។",
+        "footer_note": "ការទូទាត់មានសុវត្ថិភាព · សេវាជំនួយ · ដឹកជញ្ជូនរហ័ស",
+        "featured": "ផលិតផលពេញនិយម", "best_picks": "ជម្រើសល្អពី LSV", "view_all": "មើលទាំងអស់",
+        "more_products": "ផលិតផល LSV បន្ថែម", "explore_range": "ស្វែងយល់ផលិតផល", "shop_all": "ទិញទាំងអស់",
+        "home_care": "សាប៊ូបោកគក់", "laundry_dishwash": "សាប៊ូលាងចាន", "personal_care": "ថែរក្សារាងកាយ",
+        "collection": "បណ្ដុំផលិតផល", "shop_all_title": "ផលិតផលទាំងអស់", "products_found": "ផលិតផលត្រូវបានរកឃើញ",
+        "all_categories": "គ្រប់ប្រភេទ", "newest": "ថ្មីបំផុត", "price_low": "តម្លៃ៖ ទាបទៅខ្ពស់", "price_high": "តម្លៃ៖ ខ្ពស់ទៅទាប",
+        "name_az": "ឈ្មោះ៖ A–Z", "name_za": "ឈ្មោះ៖ Z–A", "apply": "អនុវត្ត", "no_products": "រកមិនឃើញផលិតផល",
+        "try_search": "សូមសាកល្បងពាក្យស្វែងរក ឬប្រភេទផ្សេង។", "add_cart": "ដាក់ចូលកន្ត្រក", "toggle_wishlist": "បន្ថែម/ដកពីបញ្ជីចង់បាន",
+        "in_stock": "មានក្នុងស្តុក", "out_stock": "អស់ពីស្តុក", "fast_delivery": "ដឹកជញ្ជូនរហ័ស", "secure_checkout": "ទូទាត់មានសុវត្ថិភាព",
+        "related": "ផលិតផលដែលអ្នកអាចចូលចិត្ត", "your_cart": "កន្ត្រករបស់អ្នក", "each": "ក្នុងមួយ", "update": "កែប្រែ", "remove": "ដកចេញ",
+        "order_summary": "សង្ខេបការបញ្ជាទិញ", "subtotal": "សរុបរង", "delivery": "ការដឹកជញ្ជូន", "at_checkout": "គណនានៅពេលទូទាត់",
+        "total": "សរុប", "continue_checkout": "បន្តទៅការទូទាត់", "empty_cart": "កន្ត្រករបស់អ្នកនៅទទេ", "start_shopping": "ចាប់ផ្ដើមទិញ",
+        "checkout": "ទូទាត់", "delivery_details": "ព័ត៌មានដឹកជញ្ជូន", "shipping_address": "អាសយដ្ឋានដឹកជញ្ជូន", "phone": "លេខទូរសព្ទ",
+        "payment_method": "វិធីទូទាត់", "cod": "បង់ប្រាក់ពេលទទួលទំនិញ", "cod_note": "បង់ប្រាក់នៅពេលទំនិញមកដល់", "confirm_order": "បញ្ជាក់ការបញ្ជាទិញ",
+        "your_order": "ការបញ្ជាទិញរបស់អ្នក", "welcome_back": "សូមស្វាគមន៍មកវិញ", "email": "អ៊ីមែល", "password": "ពាក្យសម្ងាត់",
+        "remember": "ចងចាំខ្ញុំ", "create_account": "បង្កើតគណនី", "full_name": "ឈ្មោះពេញ", "new_here": "មិនទាន់មានគណនី?",
+        "admin": "អ្នកគ្រប់គ្រង", "dashboard": "ផ្ទាំងគ្រប់គ្រង", "products": "ផលិតផល", "categories": "ប្រភេទផលិតផល",
+        "customers": "អតិថិជន", "revenue": "ចំណូល", "view_store": "មើលហាង", "recent_orders": "ការបញ្ជាទិញថ្មីៗ",
+        "clear_store_view": "ទិដ្ឋភាពទូទៅនៃហាងរបស់អ្នក។", "manage_catalog": "គ្រប់គ្រងផលិតផល និងស្តុក។",
+        "add_product": "បន្ថែមផលិតផល", "edit": "កែប្រែ", "delete": "លុប", "archive": "រក្សាទុក",
+        "category": "ប្រភេទ", "price": "តម្លៃ", "stock": "ស្តុក", "status": "ស្ថានភាព", "active": "សកម្ម",
+        "product_name": "ឈ្មោះផលិតផល", "description": "ការពិពណ៌នា", "old_price": "តម្លៃចាស់", "image": "រូបភាព",
+        "save_product": "រក្សាទុកផលិតផល", "cancel": "បោះបង់", "add_category": "បន្ថែមប្រភេទ", "name": "ឈ្មោះ", "slug": "Slug",
+        "customer": "អតិថិជន", "payment": "ការទូទាត់", "fulfilment": "ការដឹកជញ្ជូន", "save": "រក្សាទុក",
+        "disable": "បិទ", "enable": "បើក", "order_count": "ការបញ្ជាទិញ", "admin_login": "ចូលផ្ទាំងគ្រប់គ្រង",
+        "secure_area": "តំបន់សុវត្ថិភាព", "username": "ឈ្មោះអ្នកប្រើ", "sign_in_admin": "ចូលគ្រប់គ្រង", "no_orders": "មិនទាន់មានការបញ្ជាទិញ។",
+        "contact_info": "ព័ត៌មានទំនាក់ទំនង", "shipping_info": "ព័ត៌មានដឹកជញ្ជូន", "province": "រាជធានី / ខេត្ត", "choose_province": "ជ្រើសរើសរាជធានី / ខេត្ត",
+        "address_detail": "អាសយដ្ឋានលម្អិត", "telegram_updates": "ទទួលព័ត៌មានតាម Telegram", "aba_khqr": "ABA KHQR", "khqr_note": "ស្កេន KHQR ដើម្បីទូទាត់ដោយសុវត្ថិភាព",
+        "delivery_fee": "ថ្លៃដឹកជញ្ជូន", "place_order": "បញ្ជាទិញឥឡូវ", "items_subtotal": "តម្លៃទំនិញសរុប",
+        "location": "ទីតាំង", "shipping_location": "ទីតាំងដឹកជញ្ជូន", "not_provided": "មិនទាន់បញ្ចូល",
+        "pending": "កំពុងរង់ចាំ", "paid": "បានទូទាត់", "failed": "បរាជ័យ", "refunded": "បានសងប្រាក់",
+        "confirmed": "បានបញ្ជាក់", "processing": "កំពុងរៀបចំ", "shipped": "បានដឹកចេញ", "delivered": "បានដឹកដល់", "cancelled": "បានបោះបង់",
+    },
+    "en": {}
+}
+
+
+def translate(lang, key, default=None):
+    return TRANSLATIONS.get(lang, {}).get(key, default or key.replace("_", " ").title())

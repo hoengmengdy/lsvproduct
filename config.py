@@ -12,6 +12,8 @@ class Config:
     _database_url = os.getenv("DATABASE_URL")
     if _database_url and _database_url.startswith("postgres://"):
         _database_url = _database_url.replace("postgres://", "postgresql+psycopg://", 1)
+    elif _database_url and _database_url.startswith("postgresql://"):
+        _database_url = _database_url.replace("postgresql://", "postgresql+psycopg://", 1)
     SQLALCHEMY_DATABASE_URI = _database_url or f"sqlite:///{(TMP_DIR if IS_VERCEL else BASE_DIR / 'database') / 'shopping.db'}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAX_CONTENT_LENGTH = int(os.getenv("MAX_CONTENT_LENGTH") or 5 * 1024 * 1024)

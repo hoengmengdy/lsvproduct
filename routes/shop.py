@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session, redirect
+from flask import Blueprint, Response, abort, render_template, request, session, redirect
 from sqlalchemy import or_
 from extensions import db
 from models import Product, Category
@@ -41,6 +41,17 @@ def product_detail(product_id):
     related = db.session.scalars(db.select(Product).where(Product.category_id == product.category_id, Product.id != product.id, Product.status.is_(True)).limit(4)).all()
     return render_template("product_detail.html", product=product, related=related)
 
+
+
+@shop_bp.get("/product-image/<int:product_id>")
+def product_image(product_id):
+    product = db.session.get(Product, product_id)
+    if product is None or not product.image_blob:
+        abort(404)
+    response = Response(product.image_blob, mimetype=product.image_mime or "application/octet-stream")
+    response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    return response
 
 @shop_bp.get("/api/products")
 def products_api():

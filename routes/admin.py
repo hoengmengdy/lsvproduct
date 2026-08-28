@@ -1,5 +1,4 @@
 from functools import wraps
-from pathlib import Path
 from uuid import uuid4
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app
 from sqlalchemy import func
@@ -24,13 +23,26 @@ def admin_required(view):
 
 
 def save_image(file):
-    if not file or not file.filename: return None
+    if not file or not file.filename:
+        return None
     filename = secure_filename(file.filename)
     ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
-    if ext not in ALLOWED_EXTENSIONS: raise ValueError("Use PNG, JPG, WEBP, or GIF images.")
-    filename = f"{uuid4().hex}.{ext}"
-    file.save(Path(current_app.config["UPLOAD_FOLDER"]) / filename)
-    return filename
+    data = file.read()
+    if ext not in ALLOWED_EXTENSIONS or not data:
+        raise ValueError("Use a valid PNG, JPG, WEBP, or GIF image.")
+    if len(data) > 2_500_000:
+        raise ValueError("Image must be smaller than 2.5 MB after compression.")
+    signatures = {
+        "png": (data.startswith(b"\x89PNG\r\n\x1a\n"), "image/png"),
+        "jpg": (data.startswith(b"\xff\xd8\xff"), "image/jpeg"),
+        "jpeg": (data.startswith(b"\xff\xd8\xff"), "image/jpeg"),
+        "webp": (len(data) > 12 and data.startswith(b"RIFF") and data[8:12] == b"WEBP", "image/webp"),
+        "gif": (data.startswith((b"GIF87a", b"GIF89a")), "image/gif"),
+    }
+    valid, mime = signatures[ext]
+    if not valid:
+        raise ValueError("The uploaded file content does not match its image type.")
+    return f"{uuid4().hex}.{ext}", data, mime
 
 
 @admin_bp.route("/login", methods=["GET", "POST"])
@@ -79,7 +91,8 @@ def product_values(product):
     product.status = bool(request.form.get("status"))
     if not product.name or not product.description or float(product.price) < 0 or int(product.stock) < 0: raise ValueError("Enter valid product details.")
     image = save_image(request.files.get("image"))
-    if image: product.image = image
+    if image:
+        product.image, product.image_blob, product.image_mime = image
 
 
 @admin_bp.route("/products/add", methods=["GET", "POST"])

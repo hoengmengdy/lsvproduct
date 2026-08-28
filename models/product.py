@@ -11,6 +11,8 @@ class Product(db.Model):
     stock = db.Column(db.Integer, default=0, nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"), nullable=False)
     image = db.Column(db.String(255))
+    image_blob = db.Column(db.LargeBinary)
+    image_mime = db.Column(db.String(50))
     created_at = db.Column(db.DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at = db.Column(db.DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
     status = db.Column(db.Boolean, default=True, nullable=False)

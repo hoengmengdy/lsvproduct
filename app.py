@@ -2,6 +2,7 @@ from pathlib import Path
 from flask import Flask, render_template, session, redirect, request, url_for, flash
 from flask_login import current_user
 from flask_wtf.csrf import CSRFError
+from sqlalchemy import inspect, text
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -11,6 +12,22 @@ from extensions import db, login_manager, csrf
 from models import User, Cart, Category
 from translations import translate
 
+
+
+
+def ensure_product_image_columns():
+    """Add persistent upload columns to databases created before this feature."""
+    columns = {column["name"] for column in inspect(db.engine).get_columns("product")}
+    statements = []
+    if "image_blob" not in columns:
+        blob_type = "BYTEA" if db.engine.dialect.name == "postgresql" else "BLOB"
+        statements.append(f"ALTER TABLE product ADD COLUMN image_blob {blob_type}")
+    if "image_mime" not in columns:
+        statements.append("ALTER TABLE product ADD COLUMN image_mime VARCHAR(50)")
+    if statements:
+        with db.engine.begin() as connection:
+            for statement in statements:
+                connection.execute(text(statement))
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -71,6 +88,7 @@ def create_app(config_class=Config):
 
     with app.app_context():
         db.create_all()
+        ensure_product_image_columns()
         if config_class is Config:
             from bootstrap_catalog import ensure_admin_from_env, ensure_catalog
             ensure_catalog()

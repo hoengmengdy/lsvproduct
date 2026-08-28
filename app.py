@@ -1,4 +1,4 @@
-from pathlib import Path
+﻿from pathlib import Path
 from flask import Flask, render_template, session, redirect, request, url_for, flash
 from flask_login import current_user
 from flask_wtf.csrf import CSRFError
@@ -71,6 +71,9 @@ def create_app(config_class=Config):
 
     with app.app_context():
         db.create_all()
+        if config_class is Config:
+            from bootstrap_catalog import ensure_catalog
+            ensure_catalog()
     return app
 
 
@@ -78,3 +81,5 @@ app = create_app()
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+

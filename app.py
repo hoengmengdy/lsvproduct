@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 from flask import Flask, render_template, session, redirect, request, url_for, flash
 from flask_login import current_user
 from flask_wtf.csrf import CSRFError
@@ -81,5 +81,3 @@ app = create_app()
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-

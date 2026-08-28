@@ -72,8 +72,9 @@ def create_app(config_class=Config):
     with app.app_context():
         db.create_all()
         if config_class is Config:
-            from bootstrap_catalog import ensure_catalog
+            from bootstrap_catalog import ensure_admin_from_env, ensure_catalog
             ensure_catalog()
+            ensure_admin_from_env()
     return app
 
 

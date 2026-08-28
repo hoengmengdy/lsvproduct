@@ -1,9 +1,10 @@
 import json
+import os
 from decimal import Decimal
 from pathlib import Path
 
 from extensions import db
-from models import Category, Product
+from models import Admin, Category, Product
 
 CATEGORIES = (("OKA", "oka"), ("RINs", "rins"), ("Empress", "empress"))
 OLD_IMAGE_MIGRATIONS = {
@@ -58,4 +59,20 @@ def ensure_catalog():
                 status=True,
             )
             db.session.add(product)
+    db.session.commit()
+
+def ensure_admin_from_env():
+    """Provision or rotate the admin account without storing credentials in source."""
+    username = (os.getenv("ADMIN_USERNAME") or "").strip()
+    password = os.getenv("ADMIN_PASSWORD") or ""
+    if not username and not password:
+        return
+    if not username or len(password) < 10:
+        raise RuntimeError("ADMIN_USERNAME and ADMIN_PASSWORD (minimum 10 characters) must both be set.")
+    admin = db.session.scalar(db.select(Admin).where(Admin.username == username))
+    if admin is None:
+        admin = Admin(username=username)
+        db.session.add(admin)
+    if not admin.password_hash or not admin.check_password(password):
+        admin.set_password(password)
     db.session.commit()

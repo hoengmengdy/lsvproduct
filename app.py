@@ -60,11 +60,11 @@ def create_app(config_class=Config):
 
     @app.errorhandler(405)
     def method_not_allowed(error):
-        return render_template("error.html", code=405, message="??????????????????????????? ???????????????????????"), 405
+        return render_template("error.html", code=405, message="សកម្មភាពនេះមិនត្រឹមត្រូវទេ។ សូមត្រឡប់ទៅទំព័រមុន ហើយសាកល្បងម្ដងទៀត។"), 405
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(error):
-        flash("????????????????? ??????????????????", "warning")
+        flash("ទំព័របានផុតកំណត់ ឬលេខសម្ងាត់សុវត្ថិភាពមិនត្រឹមត្រូវ។ សូមផ្ទុកទំព័រឡើងវិញ ហើយសាកល្បងម្ដងទៀត។", "warning")
         if request.endpoint == "cart.add" and not current_user.is_authenticated:
             return redirect(url_for("auth.login", next=request.referrer or url_for("shop.shop")))
         return redirect(request.referrer or url_for("shop.home"))

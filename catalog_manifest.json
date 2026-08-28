@@ -449,4 +449,31 @@
     "category": "empress",
     "image": "catalog-empress-24.webp"
   }
-]
+,
+  {
+    "name": "NaturePlus Toothpaste Charcoal & Neem Leaves 120g",
+    "description": "ថ្នាំដុសធ្មេញ NaturePlus ធ្យូង និងស្លឹកស្តៅ ចំណុះ 120 ក្រាម",
+    "price": "1.50",
+    "old_price": null,
+    "stock": 100,
+    "category": "natureplus",
+    "image": "catalog-natureplus-01.webp"
+  },
+  {
+    "name": "NaturePlus Toothpaste Guava Leaves & Amla 120g",
+    "description": "ថ្នាំដុសធ្មេញ NaturePlus ស្លឹកត្របែក និង Amla ចំណុះ 120 ក្រាម",
+    "price": "1.50",
+    "old_price": null,
+    "stock": 100,
+    "category": "natureplus",
+    "image": "catalog-natureplus-02.webp"
+  },
+  {
+    "name": "NaturePlus Toothpaste Peppermint & Lime 120g",
+    "description": "ថ្នាំដុសធ្មេញ NaturePlus ជីរអង្កាម និងក្រូចឆ្មារ ចំណុះ 120 ក្រាម",
+    "price": "1.50",
+    "old_price": null,
+    "stock": 100,
+    "category": "natureplus",
+    "image": "catalog-natureplus-03.webp"
+  }]

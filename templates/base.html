@@ -10,7 +10,7 @@
 <body>
 <div class="company-strip">
  <div class="container d-flex align-items-center justify-content-between">
-  <span class="company-name"><img class="company-mini-logo" src="{{ url_for('static', filename='img/lsv-brand-art.png') }}" alt="LSV">LSV Industry Co., Ltd.</span>
+  <span class="company-name"><img class="company-mini-logo" src="{{ url_for('static', filename='assets/lsv-brand-art.png') }}" alt="LSV">LSV Industry Co., Ltd.</span>
   <div class="company-contacts">
    <a href="tel:+85586777525"><i class="bi bi-telephone"></i> +855 86 777 525</a>
    <a href="https://www.lsvgroups.com" target="_blank" rel="noopener"><i class="bi bi-globe2"></i> lsvgroups.com</a>
@@ -19,7 +19,7 @@
  </div>
 </div>
 <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top border-bottom">
- <div class="container py-2"><a class="navbar-brand" href="{{ url_for('shop.home') }}"><img class="brand-logo" src="{{ url_for('static', filename='img/lsv-brand-art.png') }}" alt="LSV Industry"></a>
+ <div class="container py-2"><a class="navbar-brand" href="{{ url_for('shop.home') }}"><img class="brand-logo" src="{{ url_for('static', filename='assets/lsv-brand-art.png') }}" alt="LSV Industry"></a>
   <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav"><span class="navbar-toggler-icon"></span></button>
   <div class="collapse navbar-collapse" id="nav">
    <form class="search-box mx-lg-auto my-3 my-lg-0" action="{{ url_for('shop.shop') }}"><i class="bi bi-search"></i><input name="q" value="{{ request.args.get('q','') }}" placeholder="{{ t('search', 'Search products...') }}"></form>
@@ -37,6 +37,6 @@
 </nav>
 {% with messages=get_flashed_messages(with_categories=true) %}{% if messages %}<div class="container flash-stack">{% for category,message in messages %}<div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm">{{ message }}<button class="btn-close" data-bs-dismiss="alert"></button></div>{% endfor %}</div>{% endif %}{% endwith %}
 <main>{% block content %}{% endblock %}</main>
-<footer class="footer mt-5"><div class="container py-5"><div class="row g-4"><div class="col-md-5"><img class="footer-logo" src="{{ url_for('static', filename='img/lsv-brand-art.png') }}" alt="LSV Industry"><p>Thoughtfully selected essentials, delivered simply.</p></div><div class="col-6 col-md-2"><h6>Shop</h6><a href="{{ url_for('shop.shop') }}">All products</a><a href="{{ url_for('auth.wishlist') }}">Wishlist</a></div><div class="col-6 col-md-2"><h6>Account</h6><a href="{{ url_for('auth.profile') }}">Profile</a><a href="{{ url_for('auth.orders') }}">Orders</a></div><div class="col-md-3"><h6>Stay connected</h6><p class="small">Secure checkout. Helpful support. Fast delivery.</p></div></div><hr><div class="small d-flex justify-content-between"><span>© 2026 LSV</span><span>Privacy · Terms</span></div></div></footer>
+<footer class="footer mt-5"><div class="container py-5"><div class="row g-4"><div class="col-md-5"><img class="footer-logo" src="{{ url_for('static', filename='assets/lsv-brand-art.png') }}" alt="LSV Industry"><p>Thoughtfully selected essentials, delivered simply.</p></div><div class="col-6 col-md-2"><h6>Shop</h6><a href="{{ url_for('shop.shop') }}">All products</a><a href="{{ url_for('auth.wishlist') }}">Wishlist</a></div><div class="col-6 col-md-2"><h6>Account</h6><a href="{{ url_for('auth.profile') }}">Profile</a><a href="{{ url_for('auth.orders') }}">Orders</a></div><div class="col-md-3"><h6>Stay connected</h6><p class="small">Secure checkout. Helpful support. Fast delivery.</p></div></div><hr><div class="small d-flex justify-content-between"><span>© 2026 LSV</span><span>Privacy · Terms</span></div></div></footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script><script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body></html>

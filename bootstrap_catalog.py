@@ -6,7 +6,7 @@ from pathlib import Path
 from extensions import db
 from models import Admin, Category, Product
 
-CATEGORIES = (("OKA", "oka"), ("RINs", "rins"), ("Empress", "empress"))
+CATEGORIES = (("OKA", "oka"), ("RINs", "rins"), ("Empress", "empress"), ("NaturePlus", "natureplus"))
 OLD_IMAGE_MIGRATIONS = {
     "oka-bright-3l.png": "catalog-oka-05.webp",
     "oka-refresh-3l.png": "catalog-oka-12.webp",

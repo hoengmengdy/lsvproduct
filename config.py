@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
-IS_VERCEL = bool(os.getenv("VERCEL"))
+IS_VERCEL = bool(os.getenv("VERCEL")) or not os.access(BASE_DIR, os.W_OK)
 TMP_DIR = Path(os.getenv("TMPDIR", "/tmp"))
 
 

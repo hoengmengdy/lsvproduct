@@ -1,0 +1,8 @@
+img/
+tests/
+database/
+.venv/
+**/__pycache__/
+import_product_images.py
+seed.py
+

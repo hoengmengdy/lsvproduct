@@ -1,0 +1,1 @@
+{"$schema":"https://openapi.vercel.sh/vercel.json","functions":{"app.py":{"excludeFiles":"{img/**,tests/**,database/**,.venv/**,**/__pycache__/**,import_product_images.py,seed.py}"}}}

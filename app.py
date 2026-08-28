@@ -16,7 +16,8 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
     Path(app.config["UPLOAD_FOLDER"]).mkdir(parents=True, exist_ok=True)
-    (Path(app.root_path) / "database").mkdir(exist_ok=True)
+    if not app.config.get("IS_VERCEL"):
+        (Path(app.root_path) / "database").mkdir(exist_ok=True)
 
     db.init_app(app)
     login_manager.init_app(app)
@@ -59,11 +60,11 @@ def create_app(config_class=Config):
 
     @app.errorhandler(405)
     def method_not_allowed(error):
-        return render_template("error.html", code=405, message="សកម្មភាពនេះមិនត្រឹមត្រូវទេ។ សូមត្រឡប់ទៅទំព័រផលិតផល។"), 405
+        return render_template("error.html", code=405, message="??????????????????????????? ???????????????????????"), 405
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(error):
-        flash("ទំព័របានផុតកំណត់។ សូមសាកល្បងម្ដងទៀត។", "warning")
+        flash("????????????????? ??????????????????", "warning")
         if request.endpoint == "cart.add" and not current_user.is_authenticated:
             return redirect(url_for("auth.login", next=request.referrer or url_for("shop.shop")))
         return redirect(request.referrer or url_for("shop.home"))

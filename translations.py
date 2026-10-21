@@ -1,5 +1,6 @@
 TRANSLATIONS = {
     "km": {
+        "quality_recognition": "ទទួលស្គាល់ និង បញ្ជាក់គុណភាពដោយ",
         "search": "ស្វែងរកផលិតផល...", "shop": "ហាង", "brands": "ម៉ាកផលិតផល",
         "sign_in": "ចូលគណនី", "profile": "ប្រវត្តិរូប", "orders": "ការបញ្ជាទិញ",
         "wishlist": "បញ្ជីចង់បាន", "sign_out": "ចាកចេញ", "all_products": "ផលិតផលទាំងអស់",

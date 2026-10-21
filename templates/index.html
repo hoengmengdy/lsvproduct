@@ -5,5 +5,11 @@
 <section class="soft-section"><div class="container py-5"><div class="section-head"><div><span class="eyebrow">{{ t('explore_range', 'EXPLORE THE RANGE') }}</span><h2>{{ t('more_products', 'More LSV products') }}</h2></div><a class="view-link" href="{{ url_for('shop.shop') }}">{{ t('shop_all', 'Shop all') }} <i class="bi bi-arrow-right"></i></a></div><div class="row g-4">{% for product in products %}{% include '_product_card.html' %}{% endfor %}</div></div></section>
 <section class="container py-5 text-center" aria-labelledby="quality-recognition-title">
  <h2 id="quality-recognition-title" class="h4 fw-bold lh-lg mb-0">{{ t('quality_recognition', 'Recognized and quality certified by') }}</h2>
+ <div class="quality-recognition-grid">
+  <a class="quality-recognition-item" href="{{ url_for('static', filename='assets/iso/recognition-award.png') }}" target="_blank" rel="noopener"><img src="{{ url_for('static', filename='assets/iso/recognition-award.png') }}" alt="LSV Industry recognition award" width="1200" height="1200" loading="lazy" decoding="async"></a>
+  <a class="quality-recognition-item" href="{{ url_for('static', filename='assets/iso/iso-9001-2015.png') }}" target="_blank" rel="noopener"><img src="{{ url_for('static', filename='assets/iso/iso-9001-2015.png') }}" alt="ISO 9001:2015 quality management certification" width="1200" height="1200" loading="lazy" decoding="async"></a>
+  <a class="quality-recognition-item" href="{{ url_for('static', filename='assets/iso/gmp.png') }}" target="_blank" rel="noopener"><img src="{{ url_for('static', filename='assets/iso/gmp.png') }}" alt="GMP certification" width="1200" height="1200" loading="lazy" decoding="async"></a>
+  <a class="quality-recognition-item" href="{{ url_for('static', filename='assets/iso/halal-cambodia.png') }}" target="_blank" rel="noopener"><img src="{{ url_for('static', filename='assets/iso/halal-cambodia.png') }}" alt="Halal Cambodia certification" width="1200" height="1200" loading="lazy" decoding="async"></a>
+ </div>
 </section>
 {% endblock %}

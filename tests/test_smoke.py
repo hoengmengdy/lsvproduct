@@ -34,7 +34,16 @@ class StoreSmokeTest(unittest.TestCase):
         self.assertEqual(self.client.post("/cart/add/1", data={"quantity": 2}).status_code, 302)
         for path in ["/cart", "/checkout", "/profile", "/orders", "/wishlist"]:
             self.assertEqual(self.client.get(path).status_code, 200, path)
-        self.assertEqual(self.client.post("/checkout", data={"name": "Customer", "province": "Phnom Penh", "address": "123 Main Street", "phone": "012345678", "payment_method": "cod"}).status_code, 302)
+        checkout_page = self.client.get("/checkout").data
+        self.assertNotIn(b'value="cod"', checkout_page)
+        self.assertIn(b'value="khqr"', checkout_page)
+        checkout_data = {"name": "Customer", "province": "Phnom Penh", "address": "123 Main Street", "phone": "012345678", "payment_method": "cod"}
+        self.assertEqual(self.client.post("/checkout", data=checkout_data).status_code, 200)
+        with self.app.app_context():
+            self.assertIsNone(db.session.scalar(db.select(Order)))
+            self.assertEqual(db.session.get(Product, 1).stock, 5)
+        checkout_data["payment_method"] = "khqr"
+        self.assertEqual(self.client.post("/checkout", data=checkout_data).status_code, 302)
         with self.app.app_context():
             self.assertEqual(db.session.scalar(db.select(Order)).total_amount, 21.50)
             self.assertEqual(db.session.get(Product, 1).stock, 3)

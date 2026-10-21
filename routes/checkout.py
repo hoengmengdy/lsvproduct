@@ -21,7 +21,7 @@ def checkout():
         name = request.form.get("name", "").strip()
         province = request.form.get("province", "").strip()
         address, phone, method = request.form.get("address", "").strip(), request.form.get("phone", "").strip(), request.form.get("payment_method", "")
-        if not name or not province or not address or not phone or method not in {"cod", "khqr"}: flash("Complete all checkout fields.", "danger")
+        if not name or not province or not address or not phone or method != "khqr": flash("Complete all checkout fields.", "danger")
         elif any(i.quantity > i.product.stock or not i.product.status for i in cart.items): flash("One or more products are no longer available.", "danger")
         else:
             current_user.name, current_user.phone, current_user.address = name, phone, address

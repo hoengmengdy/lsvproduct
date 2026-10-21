@@ -182,5 +182,41 @@ class StoreSmokeTest(unittest.TestCase):
         self.assertEqual(response.headers["Location"], "/")
 
 
+class DatabaseReconnectTest(unittest.TestCase):
+    def test_home_recovers_when_pooled_connection_is_closed(self):
+        import tempfile
+        from pathlib import Path
+        from sqlalchemy.pool import QueuePool
+        from config import Config
+
+        with tempfile.TemporaryDirectory() as directory:
+            class ReconnectConfig(TestConfig):
+                SQLALCHEMY_DATABASE_URI = "sqlite:///" + (Path(directory) / "reconnect.db").as_posix()
+                SQLALCHEMY_ENGINE_OPTIONS = {**Config.SQLALCHEMY_ENGINE_OPTIONS, "poolclass": QueuePool}
+
+            application = create_app(ReconnectConfig)
+            client = application.test_client()
+            try:
+                with application.app_context():
+                    category = Category(name="Reconnect", slug="reconnect")
+                    db.session.add(Product(name="Persistent product", description="Connection recovery", price=10,
+                                           stock=5, category=category))
+                    db.session.commit()
+                    engine = db.engine
+                for _ in range(2):
+                    connection = engine.raw_connection()
+                    driver_connection = connection.driver_connection
+                    connection.close()
+                    # Simulate the database closing an idle connection after check-in.
+                    driver_connection.close()
+                    response = client.get("/")
+                    self.assertEqual(response.status_code, 200)
+                    self.assertIn(b"Persistent product", response.data)
+            finally:
+                with application.app_context():
+                    db.session.remove()
+                    db.engine.dispose()
+
+
 if __name__ == "__main__":
     unittest.main()

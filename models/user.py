@@ -43,3 +43,17 @@ class Wishlist(db.Model):
     user = db.relationship("User", back_populates="wishlist_items")
     product = db.relationship("Product", back_populates="wishlisted_by")
 
+
+
+class ShippingAddress(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False, index=True)
+    first_name = db.Column(db.String(60), nullable=False)
+    last_name = db.Column(db.String(60), nullable=False)
+    phone = db.Column(db.String(30), nullable=False)
+    province_code = db.Column(db.String(2), nullable=False)
+    district_code = db.Column(db.String(4), nullable=False)
+    commune_code = db.Column(db.String(6), nullable=False)
+    street = db.Column(db.String(500), nullable=False)
+    is_default = db.Column(db.Boolean, default=False, nullable=False)
+    user = db.relationship("User", backref=db.backref("shipping_addresses", cascade="all, delete-orphan"))

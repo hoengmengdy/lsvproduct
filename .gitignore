@@ -6,3 +6,5 @@ database/*.db
 static/uploads/*
 !static/uploads/.gitkeep
 
+
+.runtime/

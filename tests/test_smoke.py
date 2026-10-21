@@ -1,7 +1,7 @@
 import unittest
 from app import create_app
 from extensions import db
-from models import Admin, Category, Product, User, Order
+from models import Admin, Category, Product, User, Order, OrderItem, Cart, CartItem, Wishlist
 
 
 class TestConfig:
@@ -55,6 +55,58 @@ class StoreSmokeTest(unittest.TestCase):
             self.assertEqual(self.client.get(path).status_code, 200, path)
         response = self.client.post("/admin/products/1/edit", data={"name": "Updated", "description": "Updated description", "price": "11.50", "stock": "7", "category_id": "1", "status": "on"})
         self.assertEqual(response.status_code, 302)
+
+    def test_removed_logo_stays_removed_after_catalog_initialization(self):
+        from bootstrap_catalog import ensure_catalog
+
+        with self.app.app_context():
+            logo = Product(name="okalogo", description="Brand logo", price=6.50,
+                           stock=30, category_id=1, image="catalog-oka-07.webp")
+            user = User(name="Customer", email="logo@example.com")
+            user.set_password("password123")
+            cart = Cart(user=user)
+            cart.items.append(CartItem(product=logo, quantity=1))
+            db.session.add_all([logo, user, cart, Wishlist(user=user, product=logo)])
+            db.session.commit()
+            logo_id = logo.id
+
+            ensure_catalog()
+            self.assertIsNone(db.session.scalar(db.select(Product).where(Product.name == "okalogo")))
+            self.assertEqual(db.session.scalar(db.select(db.func.count(CartItem.id))), 0)
+            self.assertEqual(db.session.scalar(db.select(db.func.count(Wishlist.id))), 0)
+            count = db.session.scalar(db.select(db.func.count(Product.id)))
+            ensure_catalog()
+            self.assertEqual(db.session.scalar(db.select(db.func.count(Product.id))), count)
+            self.assertIsNone(db.session.scalar(db.select(Product).where(Product.name == "okalogo")))
+            self.assertEqual(db.session.get(Product, 1).name, "Test Product")
+
+        self.assertNotIn(b"okalogo", self.client.get("/shop").data.lower())
+        self.assertNotIn(b"okalogo", self.client.get("/api/products").data.lower())
+        self.assertNotIn(b"okalogo", self.client.get(f"/product/{logo_id}").data.lower())
+
+    def test_removed_logo_preserves_existing_order_history(self):
+        from bootstrap_catalog import ensure_catalog
+
+        with self.app.app_context():
+            logo = Product(name="Renamed logo", description="Brand logo", price=6.50,
+                           stock=30, category_id=1, image="catalog-oka-07.webp")
+            user = User(name="Customer", email="history@example.com")
+            user.set_password("password123")
+            order = Order(user=user, total_amount=8, payment_method="khqr",
+                          shipping_address="Test address", phone="012345678")
+            order.items.append(OrderItem(product=logo, product_name="okalogo", price=6.50, quantity=1))
+            db.session.add_all([logo, user, order])
+            db.session.commit()
+            logo_id, order_id = logo.id, order.id
+
+            ensure_catalog()
+            ensure_catalog()
+            self.assertFalse(db.session.get(Product, logo_id).status)
+            self.assertEqual(db.session.get(Order, order_id).items[0].product_name, "okalogo")
+            self.assertEqual(db.session.get(Order, order_id).items[0].product_id, logo_id)
+
+        self.assertNotIn(b"Renamed logo", self.client.get("/api/products").data)
+        self.assertEqual(self.client.get(f"/product/{logo_id}").status_code, 404)
 
     def test_language_switcher(self):
         self.assertEqual(self.client.post("/language/en").status_code, 302)

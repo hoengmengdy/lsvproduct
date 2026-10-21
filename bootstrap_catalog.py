@@ -3,10 +3,15 @@ import os
 from decimal import Decimal
 from pathlib import Path
 
+from sqlalchemy import func, or_
+
 from extensions import db
 from models import Admin, Category, Product
 
 CATEGORIES = (("OKA", "oka"), ("RINs", "rins"), ("Empress", "empress"), ("NaturePlus", "natureplus"))
+RETIRED_PRODUCT_NAMES = {"okalogo", "oka okalogo"}
+RETIRED_PRODUCT_IMAGES = {"catalog-oka-07.webp"}
+
 OLD_IMAGE_MIGRATIONS = {
     "oka-bright-3l.png": "catalog-oka-05.webp",
     "oka-refresh-3l.png": "catalog-oka-12.webp",
@@ -20,8 +25,25 @@ OLD_IMAGE_MIGRATIONS = {
 def ensure_catalog():
     """Add every packaged LSV product to a new or existing database."""
     manifest_path = Path(__file__).resolve().parent / "catalog_manifest.json"
-    products = json.loads(manifest_path.read_text(encoding="utf-8"))
+    products = [
+        item for item in json.loads(manifest_path.read_text(encoding="utf-8"))
+        if item["name"].casefold() not in RETIRED_PRODUCT_NAMES
+        and item["image"] not in RETIRED_PRODUCT_IMAGES
+    ]
     by_image = {item["image"]: item for item in products}
+
+    # Retire the mistakenly imported brand logo in existing databases as well.
+    retired = db.session.scalars(db.select(Product).where(or_(
+        func.lower(Product.name).in_(RETIRED_PRODUCT_NAMES),
+        Product.image.in_(RETIRED_PRODUCT_IMAGES),
+    ))).all()
+    for product in retired:
+        for cart_item in list(product.cart_items):
+            db.session.delete(cart_item)
+        if product.order_items:
+            product.status = False
+        else:
+            db.session.delete(product)
 
     categories = {}
     for name, slug in CATEGORIES:

@@ -11,7 +11,13 @@ manifest = []
 prices = {"oka": "6.50", "rins": "4.50", "empress": "3.75"}
 for category, folder in sources:
     files = sorted((p for p in folder.iterdir() if p.suffix.lower() in {".png", ".jpg", ".jpeg", ".webp"}), key=lambda p: p.name.casefold())
+    # Reserve the removed logo's original slot to keep other image IDs stable.
+    if category == "oka" and not any(p.stem.casefold() == "okalogo" for p in files):
+        files.append(folder / "okalogo.jpg")
+        files.sort(key=lambda p: p.name.casefold())
     for index, source in enumerate(files, 1):
+        if source.stem.casefold() == "okalogo":
+            continue
         clean = re.sub(r"[_-]+", " ", source.stem)
         clean = re.sub(r"\s+", " ", clean).strip()
         prefix = {"oka": "OKA", "rins": "RINs", "empress": "Empress"}[category]

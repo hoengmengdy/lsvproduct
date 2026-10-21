@@ -78,7 +78,7 @@ with app.app_context():
             category = Category(name=brand, slug=slug)
             db.session.add(category); db.session.flush()
         for source in sorted((SOURCE_ROOT / folder).iterdir()):
-            if not source.is_file() or source.suffix.lower() not in ALLOWED:
+            if not source.is_file() or source.suffix.lower() not in ALLOWED or source.stem.casefold() == "okalogo":
                 continue
             digest = sha1(str(source).encode("utf-8")).hexdigest()[:10]
             target_name = f"{slug}-{digest}{source.suffix.lower()}"

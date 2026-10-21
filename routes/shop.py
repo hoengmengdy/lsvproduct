@@ -38,6 +38,8 @@ def shop():
 @shop_bp.get("/product/<int:product_id>")
 def product_detail(product_id):
     product = db.get_or_404(Product, product_id)
+    if not product.status:
+        abort(404)
     related = db.session.scalars(db.select(Product).where(Product.category_id == product.category_id, Product.id != product.id, Product.status.is_(True)).limit(4)).all()
     return render_template("product_detail.html", product=product, related=related)
 

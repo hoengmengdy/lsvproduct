@@ -4,22 +4,89 @@ document.querySelectorAll('[data-confirm]').forEach(form => form.addEventListene
 document.querySelector('[data-admin-menu]')?.addEventListener('click', () => document.querySelector('.admin-side')?.classList.toggle('open'));
 setTimeout(() => document.querySelectorAll('.alert').forEach(el => window.bootstrap?.Alert.getOrCreateInstance(el).close()), 5000);
 
-// Reveal content as it enters the viewport without delaying page interaction.
-const revealTargets = document.querySelectorAll('.product-card, .section-head, .brand-nav a, .panel, .stat-card');
-if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  revealTargets.forEach((element, index) => {
-    element.classList.add('reveal-on-scroll');
-    element.style.setProperty('--reveal-delay', `${(index % 4) * 70}ms`);
-  });
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Reveal content as it enters the viewport, each group with its own entrance.
+const revealGroups = [
+  ['.product-card', index => (index % 2 ? 'flip' : 'up')],
+  ['.section-head', () => 'left'],
+  ['.brand-nav a', () => 'zoom'],
+  ['.quality-recognition-item', () => 'zoom'],
+  ['.panel, .stat-card', index => (index % 2 ? 'right' : 'up')],
+];
+if ('IntersectionObserver' in window && !reduceMotion) {
   const revealObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        revealObserver.unobserve(entry.target);
-      }
+      if (!entry.isIntersecting) return;
+      const element = entry.target;
+      element.classList.add('is-visible');
+      revealObserver.unobserve(element);
+      // Drop reveal styles once finished so hover/tilt transforms respond instantly.
+      const cleanup = event => {
+        if (event.target !== element || event.propertyName !== 'transform') return;
+        element.removeEventListener('transitionend', cleanup);
+        element.classList.remove('reveal-on-scroll', 'is-visible');
+        element.removeAttribute('data-reveal');
+        element.style.removeProperty('--reveal-delay');
+      };
+      element.addEventListener('transitionend', cleanup);
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -35px' });
-  revealTargets.forEach(element => revealObserver.observe(element));
+  revealGroups.forEach(([selector, pickVariant]) => {
+    document.querySelectorAll(selector).forEach((element, index) => {
+      element.classList.add('reveal-on-scroll');
+      element.dataset.reveal = pickVariant(index);
+      element.style.setProperty('--reveal-delay', `${(index % 4) * 110}ms`);
+      revealObserver.observe(element);
+    });
+  });
+}
+
+// Scroll progress bar and compact navbar.
+const progressBar = document.createElement('div');
+progressBar.className = 'scroll-progress';
+document.body.prepend(progressBar);
+const navbar = document.querySelector('.navbar');
+const onScroll = () => {
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
+  navbar?.classList.toggle('is-scrolled', window.scrollY > 40);
+};
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+if (!reduceMotion) {
+  // 3D tilt on product cards for mouse users.
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.querySelectorAll('.product-card').forEach(card => {
+      card.addEventListener('pointermove', event => {
+        const rect = card.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width - 0.5;
+        const y = (event.clientY - rect.top) / rect.height - 0.5;
+        card.style.setProperty('--tilt-x', `${x * 14}deg`);
+        card.style.setProperty('--tilt-y', `${y * -14}deg`);
+        card.classList.add('is-tilting');
+      });
+      card.addEventListener('pointerleave', () => card.classList.remove('is-tilting'));
+    });
+  }
+
+  // Ripple on button press.
+  document.addEventListener('pointerdown', event => {
+    const button = event.target.closest('.btn, .icon-btn');
+    if (!button || button.disabled) return;
+    const rect = button.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    ripple.style.cssText = `width:${size}px;height:${size}px;left:${event.clientX - rect.left - size / 2}px;top:${event.clientY - rect.top - size / 2}px`;
+    button.append(ripple);
+    ripple.addEventListener('animationend', () => ripple.remove());
+  });
+
+  // Bounce the cart badge when it has items.
+  const cartBadge = document.querySelector('.cart-badge');
+  if (cartBadge && Number(cartBadge.textContent) > 0) setTimeout(() => cartBadge.classList.add('bump'), 600);
 }
 // Keep admin image uploads below Vercel's request limit.
 const productForm = document.querySelector('[data-product-form]');

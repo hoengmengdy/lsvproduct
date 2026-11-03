@@ -62,3 +62,36 @@
  .section-head h2{font-size:clamp(1.15rem,5vw,1.5rem);line-height:1.5;letter-spacing:0}
  .section-head .view-link{font-size:.78rem;white-space:nowrap;flex-shrink:0}
 }
+/* Bold motion layer: scroll reveals, tilt cards, ripples and hero zoom. */
+.scroll-progress{position:fixed;top:0;left:0;right:0;height:4px;z-index:1090;background:linear-gradient(90deg,#087a43,#3fc37a,#e07825);transform-origin:0 50%;transform:scaleX(0);pointer-events:none}
+.navbar{transition:box-shadow .35s,padding .35s,background-color .35s}.navbar .brand-logo{transition:transform .35s}
+.navbar.is-scrolled{background:#ffffffeb!important;backdrop-filter:blur(10px);box-shadow:0 12px 34px #17452f1f}.navbar.is-scrolled .container{padding-top:2px!important;padding-bottom:2px!important}.navbar.is-scrolled .brand-logo{transform:scale(.88)}
+.reveal-on-scroll{opacity:0;filter:blur(8px);transition:opacity .8s var(--reveal-delay) ease,transform .9s var(--reveal-delay) cubic-bezier(.16,1.3,.3,1),filter .8s var(--reveal-delay) ease}
+.reveal-on-scroll[data-reveal=up]{transform:translateY(70px) scale(.94)}
+.reveal-on-scroll[data-reveal=zoom]{transform:scale(.6) rotate(-4deg)}
+.reveal-on-scroll[data-reveal=left]{transform:translateX(-90px) skewX(6deg)}
+.reveal-on-scroll[data-reveal=right]{transform:translateX(90px) skewX(-6deg)}
+.reveal-on-scroll[data-reveal=flip]{transform:perspective(900px) rotateX(55deg) translateY(60px);transform-origin:50% 100%}
+.reveal-on-scroll.is-visible{opacity:1;filter:none;transform:none}
+.hero-carousel{animation:heroCarouselIn 1.1s cubic-bezier(.16,1,.3,1) both}
+.hero-carousel .carousel-item.active .lsv-hero-banner{animation:kenBurns 7s ease-out both}
+.product-card{--tilt-x:0deg;--tilt-y:0deg;transition:transform .25s ease-out,box-shadow .3s}
+.product-card.is-tilting{transform:perspective(900px) rotateX(var(--tilt-y)) rotateY(var(--tilt-x)) translateY(-8px);box-shadow:0 26px 50px #17452f2e}
+.product-card .product-image{overflow:hidden}
+.product-card .product-image::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,#ffffffb3 50%,transparent 65%);transform:translateX(-120%);pointer-events:none}
+.product-card:hover .product-image::after{transform:translateX(120%);transition:transform .8s ease}
+.product-card:hover .product-image img{transform:scale(1.1) rotate(-2deg)}
+.sale-badge{animation:salePulse 1.6s ease-in-out infinite}
+.btn,.icon-btn{position:relative;overflow:hidden}
+.ripple{position:absolute;border-radius:50%;background:#ffffff8c;transform:scale(0);animation:ripple .6s ease-out forwards;pointer-events:none}
+.icon-btn{transition:transform .2s cubic-bezier(.3,1.6,.5,1),background .2s}.icon-btn:hover{transform:scale(1.15) rotate(-8deg)}.icon-btn:active{transform:scale(.9)}
+.cart-badge.bump{animation:cartBump .8s cubic-bezier(.3,1.6,.5,1)}
+.brand-nav a{position:relative;overflow:hidden}.brand-nav a::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,#ffffff66 50%,transparent 70%);transform:translateX(-120%)}.brand-nav a:hover::before{transform:translateX(120%);transition:transform .7s ease}.brand-nav a:hover{transform:translateY(-5px) scale(1.03);box-shadow:0 16px 30px #087a4333}
+.view-link i{animation:nudge 1.4s ease-in-out infinite}
+@keyframes heroCarouselIn{from{opacity:0;transform:scale(.85) translateY(40px);filter:blur(10px)}to{opacity:1;transform:none;filter:none}}
+@keyframes kenBurns{from{transform:scale(1.12)}to{transform:scale(1)}}
+@keyframes salePulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 #e0782580}50%{transform:scale(1.08);box-shadow:0 0 0 8px #e0782500}}
+@keyframes ripple{to{transform:scale(4);opacity:0}}
+@keyframes cartBump{0%{transform:scale(1)}30%{transform:scale(1.6) rotate(-12deg)}60%{transform:scale(.9) rotate(6deg)}100%{transform:scale(1)}}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+@media(prefers-reduced-motion:reduce){.reveal-on-scroll{opacity:1;filter:none;transform:none}.scroll-progress{display:none}.product-card.is-tilting{transform:none}}
